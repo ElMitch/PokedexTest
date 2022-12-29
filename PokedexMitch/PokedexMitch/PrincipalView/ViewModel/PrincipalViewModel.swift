@@ -6,16 +6,25 @@
 //
 
 import Foundation
+import RxSwift
 
 class PrincipalViewModel {
-    private var view: PrincipalView?
-    private var router: PrincipalRouter?
-    private var managerConnections: NetworkManagerService?
+    private var view: PrincipalViewController?
+    private var router: PrincipalViewRouter?
+    private var managerConnections = NetworkManagerService()
 
-    func bind(view: PrincipalView, router: PrincipalRouter) {
+    func bind(view: PrincipalViewController, router: PrincipalViewRouter) {
         self.view = view
         self.router = router
 
         self.router?.setSourceView(view)
+    }
+
+    func getPokemonList(offset: Int) -> Observable<PokemonList> {
+        return managerConnections.getPokemons(offset: offset)
+    }
+
+    func getPokemonFilered(with search: String) -> Observable<PokemonModel> {
+        return managerConnections.getFilteredPokemon(with: search)
     }
 }

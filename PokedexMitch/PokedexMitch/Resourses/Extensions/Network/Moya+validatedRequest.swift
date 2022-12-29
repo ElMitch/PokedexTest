@@ -11,10 +11,8 @@ import Moya
 extension MoyaProvider {
     @discardableResult
     func requestValidated(_ target: Target,
-                          callbackQueue: DispatchQueue? = .none,
-                          progress: ProgressBlock? = .none,
                           completion: @escaping Completion) -> Cancellable {
-        request(target, callbackQueue: callbackQueue, progress: progress) { result in
+        request(target) { result in
             switch result {
             case let .success(result):
                 if let request = result.request {

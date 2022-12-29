@@ -15,22 +15,20 @@ final class NetworkManagerService {
     typealias Closure<T> = (Result<T, Error>) -> Void
 
     // MARK: - Properties
-
-    static let shared = NetworkManagerService()
     let provider: MoyaProvider<NetworkRouter>
 
     init() {
         provider = .init()
     }
 
-    func getPokemons() -> Observable<[PokemonModel]> {
+    func getPokemons(offset: Int) -> Observable<PokemonList> {
         return Observable.create { observer in
-            self.provider.request(.getPokemonList) { result in
+            self.provider.requestValidated(.getPokemonList(offset: offset)) { result in
                 switch result {
                 case let .success(response):
                     do {
-                        let userData = try JSONDecoder().decode(PokemonList.self, from: response.data)
-                        observer.onNext(userData.results)
+                        let listData = try JSONDecoder().decode(PokemonList.self, from: response.data)
+                        observer.onNext(listData)
                     } catch let error {
                         observer.onError(error)
                     }
@@ -41,9 +39,53 @@ final class NetworkManagerService {
                 observer.onCompleted()
             }
             return Disposables.create {
-                self.provider.cancelCompletion({ result in
-                    print(result)
-                }, target: .getPokemonList)
+                print("Se completo la carga de la lista")
+            }
+        }
+    }
+
+    func getDetailOfPokemon(of number: Int) -> Observable<PokemonDetailModel> {
+        return Observable.create { observer in
+            self.provider.requestValidated(.pokemonDetail(number: number)) { result in
+                switch result {
+                case let .success(response):
+                    do {
+                        let detailData = try JSONDecoder().decode(PokemonDetailModel.self, from: response.data)
+                        observer.onNext(detailData)
+                    } catch let error {
+                        observer.onError(error)
+                    }
+                case let .failure(error):
+                    print("Error request: \(error.errorDescription ?? "")")
+                    observer.onError(error)
+                }
+                observer.onCompleted()
+            }
+            return Disposables.create {
+                print("Se completo la obtencion del detalle")
+            }
+        }
+    }
+
+    func getFilteredPokemon(with search: String) -> Observable<PokemonModel> {
+        return Observable.create { observer in
+            self.provider.requestValidated(.getFilteredPokemon(search: search)) { result in
+                switch result {
+                case let .success(response):
+                    do {
+                        let detailData = try JSONDecoder().decode(PokemonModel.self, from: response.data)
+                        observer.onNext(detailData)
+                    } catch let error {
+                        observer.onError(error)
+                    }
+                case let .failure(error):
+                    print("Error request: \(error.errorDescription ?? "")")
+                    observer.onError(error)
+                }
+                observer.onCompleted()
+            }
+            return Disposables.create {
+                print("Se completo la obtencion del detalle")
             }
         }
     }

@@ -8,13 +8,23 @@
 import UIKit
 
 public extension NSAttributedString {
-    static var pokemonName: [NSAttributedString.Key: Any] = [
+    static var pokemonListName: [NSAttributedString.Key: Any] = [
         .font: UIFont.systemFont(ofSize: 16),
-        .foregroundColor: UIColor.black
+        .foregroundColor: UIColor.white
     ]
 
-    static var pokemonNumber: [NSAttributedString.Key: Any] = [
+    static var pokemonListNumber: [NSAttributedString.Key: Any] = [
         .font: UIFont.systemFont(ofSize: 12),
-        .foregroundColor: UIColor.gray
+        .foregroundColor: UIColor.white
+    ]
+
+    static var pokemonDetailName: [NSAttributedString.Key: Any] = [
+        .font: UIFont.systemFont(ofSize: 24),
+        .foregroundColor: UIColor.white
+    ]
+
+    static var pokemonDetailNumber: [NSAttributedString.Key: Any] = [
+        .font: UIFont.systemFont(ofSize: 16),
+        .foregroundColor: UIColor.white
     ]
 }

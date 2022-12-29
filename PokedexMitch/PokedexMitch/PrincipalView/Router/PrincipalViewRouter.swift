@@ -1,5 +1,5 @@
 //
-//  PrincipalRouter.swift
+//  PrincipalViewRouter.swift
 //  PokedexMitch
 //
 //  Created by Mitchell Samaniego on 28/12/22.
@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class PrincipalRouter {
+class PrincipalViewRouter {
     var viewController: UIViewController {
         return createViewController()
     }
@@ -16,7 +16,7 @@ class PrincipalRouter {
     private var sourceView: UIViewController?
 
     private func createViewController() -> UIViewController {
-        let view = PrincipalView()
+        let view = PrincipalViewController()
         return view
     }
 
@@ -25,5 +25,8 @@ class PrincipalRouter {
         self.sourceView = view
     }
 
-    func navigateToDetailView() {}
+    func navigateToDetailView(sending pokemonID: Int) {
+        let detailView = DetailViewRouter(pokemonID: pokemonID).viewController
+        sourceView?.navigationController?.pushViewController(detailView, animated: true)
+    }
 }

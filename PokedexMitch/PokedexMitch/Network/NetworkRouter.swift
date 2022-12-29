@@ -9,7 +9,9 @@ import Foundation
 import Moya
 
 enum NetworkRouter: TargetType {
-    case getPokemonList
+    case getPokemonList(offset: Int)
+    case pokemonDetail(number: Int)
+    case getFilteredPokemon(search: String)
     
     var baseURL: URL {
         URL(string: Environment.getEnvironmentVariable(name: .baseUrl) ?? "")!
@@ -19,18 +21,24 @@ enum NetworkRouter: TargetType {
         switch self {
         case .getPokemonList:
             return "pokemon"
+        case let .pokemonDetail(number):
+            return "pokemon/\(number)/"
+        case let .getFilteredPokemon(search):
+            return "pokemon/\(search)/"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .getPokemonList:
+        case .getPokemonList, .pokemonDetail, .getFilteredPokemon:
             return .get
         }
     }
     
     var task: Task {
         switch self {
+        case let .getPokemonList(offset):
+            return .requestParameters(parameters: ["offset": offset], encoding: URLEncoding.queryString)
         default:
             return .requestPlain
         }

@@ -9,10 +9,11 @@ import Foundation
 
 struct PokemonList: Codable, Hashable {
     let count: Int
+    let next: String?
     let results: [PokemonModel]
 }
 
 struct PokemonModel: Codable, Hashable {
     let name: String
-    let url: String
+    let id: Int?
 }

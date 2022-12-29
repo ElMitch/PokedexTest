@@ -11,8 +11,8 @@ class PokemonCell: UICollectionViewCell {
     static let identifier = "PokemonCell_identifier"
 
     private var containerView = UIView()
+    private var imageBackground = UIView()
     private var imageOfPokemon = UIImageView()
-    private var numberOfPokemon = UILabel()
     private var nameOfPokemon = UILabel()
 
     override init(frame: CGRect) {
@@ -28,46 +28,48 @@ class PokemonCell: UICollectionViewCell {
     private func setupCell() {
         contentView.registerView(containerView)
         
-        containerView.registerView(imageOfPokemon)
-
-        let textStackView = UIStackView(arrangedSubviews: [numberOfPokemon, nameOfPokemon])
-        textStackView.axis = .vertical
-        textStackView.distribution = .fillProportionally
-        textStackView.alignment = .fill
-        textStackView.spacing = 0
-
-        containerView.registerView(textStackView)
+        containerView.registerView(imageBackground)
+        imageBackground.registerView(imageOfPokemon)
+        containerView.registerView(nameOfPokemon)
 
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
 
-            imageOfPokemon.topAnchor.constraint(equalTo: containerView.topAnchor),
-            imageOfPokemon.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            imageOfPokemon.heightAnchor.constraint(equalToConstant: 140),
-            imageOfPokemon.widthAnchor.constraint(equalToConstant: 140),
+            imageBackground.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 12),
+            imageBackground.heightAnchor.constraint(equalToConstant: 120),
+            imageBackground.widthAnchor.constraint(equalToConstant: 120),
+            imageBackground.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
 
-            textStackView.topAnchor.constraint(equalTo: imageOfPokemon.bottomAnchor, constant: 10),
-            textStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            textStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            textStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+            imageOfPokemon.centerYAnchor.constraint(equalTo: imageBackground.centerYAnchor),
+            imageOfPokemon.centerXAnchor.constraint(equalTo: imageBackground.centerXAnchor),
+            imageOfPokemon.heightAnchor.constraint(equalToConstant: 100),
+            imageOfPokemon.widthAnchor.constraint(equalToConstant: 100),
+
+            nameOfPokemon.topAnchor.constraint(equalTo: imageBackground.bottomAnchor),
+            nameOfPokemon.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8),
+            nameOfPokemon.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -8),
+            nameOfPokemon.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
 
-        imageOfPokemon.layer.cornerRadius = 70
-        imageOfPokemon.layer.shadowColor = UIColor.mainYellow.cgColor
-        imageOfPokemon.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-        imageOfPokemon.layer.shadowOpacity = 1
-        imageOfPokemon.layer.shadowRadius = 5
-        imageOfPokemon.clipsToBounds = false
+        imageOfPokemon.setShadow()
 
         nameOfPokemon.textAlignment = .center
+
+        containerView.layer.borderColor = UIColor.mainRed.cgColor
+        containerView.layer.borderWidth = 1.0
+        containerView.layer.cornerRadius = 10
+
+        imageBackground.backgroundColor = .mainBlue.withAlphaComponent(0.3)
+        imageBackground.layer.cornerRadius = 60
+
+        nameOfPokemon.numberOfLines = 0
     }
 
     func setInfo(with pokemon: PokemonModel, _ number: Int) {
-        imageOfPokemon.backgroundColor = .cyan
-        nameOfPokemon.attributedText = .init(string: pokemon.name, attributes: NSAttributedString.pokemonName)
-        numberOfPokemon.attributedText = .init(string: "N°\(number)", attributes: NSAttributedString.pokemonNumber)
+        imageOfPokemon.setPrincipalImage(of: number)
+        nameOfPokemon.attributedText = .init(string: pokemon.name.capitalized, attributes: NSAttributedString.pokemonListName)
     }
 }
