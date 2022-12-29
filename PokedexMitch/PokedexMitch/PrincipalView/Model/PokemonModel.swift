@@ -16,4 +16,5 @@ struct PokemonList: Codable, Hashable {
 struct PokemonModel: Codable, Hashable {
     let name: String
     let id: Int?
+    let url: String?
 }

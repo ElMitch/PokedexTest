@@ -21,6 +21,7 @@ struct TypesListModel: Codable, Hashable {
 
 struct TypeModel: Codable, Hashable {
     let name: TypeEnum
+    let url: String
 }
 
 enum TypeEnum: String, Codable {

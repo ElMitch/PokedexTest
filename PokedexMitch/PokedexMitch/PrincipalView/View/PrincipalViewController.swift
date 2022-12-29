@@ -38,9 +38,9 @@ class PrincipalViewController: UIViewController {
 
     private func setupView() {
         view.backgroundColor = .black.withAlphaComponent(0.7)
-        emptyView.backgroundColor = .black.withAlphaComponent(0.7)
+        emptyView.backgroundColor = .black
         setupCollectionView()
-
+        
         view.registerView(emptyView)
         emptyView.registerView(emptyImage)
         emptyView.registerView(emptyLabel)
@@ -50,15 +50,27 @@ class PrincipalViewController: UIViewController {
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-
+            
             emptyView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             emptyView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             emptyView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             emptyView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
             emptyImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyImage.bottomAnchor.constraint(equalTo: emptyLabel.topAnchor, constant: -12),
+            emptyImage.heightAnchor.constraint(equalToConstant: 120),
+            emptyImage.widthAnchor.constraint(equalToConstant: 150),
+
+            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyLabel.leadingAnchor.constraint(equalTo: emptyView.leadingAnchor, constant: 24),
+            emptyLabel.trailingAnchor.constraint(equalTo: emptyView.trailingAnchor, constant: -24)
         ])
+
+        emptyImage.image = UIImage(named: "emptyImage")
+        emptyLabel.attributedText = .init(string: "Parece que no hemos podido encontrar resultados. Intenta con otra busqueda", attributes: NSAttributedString.pokemonDetailNumber)
+        emptyLabel.numberOfLines = 0
+        emptyLabel.textAlignment = .center
+        emptyView.isHidden = true
     }
 
     private func setupCollectionView() {
@@ -92,9 +104,15 @@ class PrincipalViewController: UIViewController {
             .subscribe { [weak self] pokemonResult in
                 self?.filteredPokemons.append(pokemonResult)
                 self?.reloadCollectionView()
-            } onError: { error in
-                print(error.localizedDescription)
+                self?.emptyView.isHidden = true
+            } onError: { [weak self] errorResult in
+                self?.emptyView.isHidden = false
+                print(errorResult.localizedDescription)
             }.disposed(by: disposeBag)
+    }
+
+    private func getForType(with type: Int) {
+        
     }
 
     private func reloadCollectionView() {

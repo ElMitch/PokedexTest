@@ -16,6 +16,7 @@
 		7F471E12295D77C40010BA78 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F471E11295D77C40010BA78 /* DetailViewModel.swift */; };
 		7F471E14295D780C0010BA78 /* DetailViewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F471E13295D780C0010BA78 /* DetailViewRouter.swift */; };
 		7F471E17295D849A0010BA78 /* UILabel+background.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F471E16295D849A0010BA78 /* UILabel+background.swift */; };
+		7F471E19295D9EB80010BA78 /* String+getType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F471E18295D9EB80010BA78 /* String+getType.swift */; };
 		7F6799F7295C1EE20077EEC5 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 7F6799F6295C1EE20077EEC5 /* Moya */; };
 		7F6799F9295D1B5F0077EEC5 /* NetworkRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6799F8295D1B5F0077EEC5 /* NetworkRouter.swift */; };
 		7F6799FB295D1C450077EEC5 /* NetworkManagerServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6799FA295D1C450077EEC5 /* NetworkManagerServices.swift */; };
@@ -47,6 +48,7 @@
 		7F471E11295D77C40010BA78 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		7F471E13295D780C0010BA78 /* DetailViewRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewRouter.swift; sourceTree = "<group>"; };
 		7F471E16295D849A0010BA78 /* UILabel+background.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+background.swift"; sourceTree = "<group>"; };
+		7F471E18295D9EB80010BA78 /* String+getType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+getType.swift"; sourceTree = "<group>"; };
 		7F6799F8295D1B5F0077EEC5 /* NetworkRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRouter.swift; sourceTree = "<group>"; };
 		7F6799FA295D1C450077EEC5 /* NetworkManagerServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManagerServices.swift; sourceTree = "<group>"; };
 		7F679A0B295D20200077EEC5 /* TextStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextStyles.swift; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 				7F679A10295D21FC0077EEC5 /* Colors.swift */,
 				7F2D3E02295D45A900E01EE7 /* ImageCharge.swift */,
 				7F471E0C295D73D00010BA78 /* EstimatedAnchors.swift */,
+				7F471E18295D9EB80010BA78 /* String+getType.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -384,6 +387,7 @@
 				7F471E0F295D75A00010BA78 /* UIVIewController+constants.swift in Sources */,
 				7F471E12295D77C40010BA78 /* DetailViewModel.swift in Sources */,
 				7FC45ECF295C1BA200A84621 /* Moya+validatedRequest.swift in Sources */,
+				7F471E19295D9EB80010BA78 /* String+getType.swift in Sources */,
 				7F679A0C295D20200077EEC5 /* TextStyles.swift in Sources */,
 				7F471E17295D849A0010BA78 /* UILabel+background.swift in Sources */,
 				7FC45EBB295C0DA100A84621 /* PrincipalViewController.swift in Sources */,

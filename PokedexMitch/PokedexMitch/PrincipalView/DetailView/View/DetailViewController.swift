@@ -34,6 +34,8 @@ class DetailViewController: UIViewController {
     private let pokemonID: Int
     private let disposeBag = DisposeBag()
     private var pokemonDetail: PokemonDetailModel?
+    private var firstURL = ""
+    private var secondURL = ""
 
     init(pokemonID: Int) {
         self.pokemonID = pokemonID
@@ -151,6 +153,9 @@ class DetailViewController: UIViewController {
         firstContainer.layer.cornerRadius = 10
         secondContainer.layer.cornerRadius = 10
 
+        let tapFirst = UITapGestureRecognizer(target: self, action: #selector(didTapFirstType))
+        firstContainer.addGestureRecognizer(tapFirst)
+
         typesTitle.attributedText = .init(string: "Tipo", attributes: NSAttributedString.pokemonDetailName)
 
         statsTitle.attributedText = .init(string: "Stats", attributes: NSAttributedString.pokemonDetailName)
@@ -171,11 +176,13 @@ class DetailViewController: UIViewController {
                 firstType.setTextColorOfType(type.type.name)
                 principalImage.setBackgroundWithAlphaOfType(type.type.name, alpha: 0.4)
                 shinyImage.setBackgroundWithAlphaOfType(type.type.name, alpha: 0.4)
+                firstURL = type.type.url
             } else {
                 secondType.attributedText = .init(string: type.type.name.rawValue.capitalized, attributes: NSAttributedString.pokemonDetailNumber)
                 secondType.setTextColorOfType(type.type.name)
                 secondContainer.setBackgroundOfType(type.type.name)
                 shinyImage.setBackgroundWithAlphaOfType(type.type.name, alpha: 0.4)
+                secondURL = type.type.url
             }
         }
 
@@ -196,5 +203,11 @@ class DetailViewController: UIViewController {
             } onError: { error in
                 print(error.localizedDescription)
             }.disposed(by: disposeBag)
+    }
+
+    @objc private func didTapFirstType() {
+        var urlWithOnlyNumber = firstURL.replacingOccurrences(of: "https://pokeapi.co/api/v2/type/", with: "")
+        let onlyNumber = urlWithOnlyNumber.replacingOccurrences(of: "/", with: "")
+        print(onlyNumber)
     }
 }
