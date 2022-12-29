@@ -12,6 +12,7 @@ enum NetworkRouter: TargetType {
     case getPokemonList(offset: Int)
     case pokemonDetail(number: Int)
     case getFilteredPokemon(search: String)
+    case getPokemonsForType(type: String)
     
     var baseURL: URL {
         URL(string: Environment.getEnvironmentVariable(name: .baseUrl) ?? "")!
@@ -25,12 +26,14 @@ enum NetworkRouter: TargetType {
             return "pokemon/\(number)/"
         case let .getFilteredPokemon(search):
             return "pokemon/\(search)/"
+        case let .getPokemonsForType(type):
+            return "type/\(type)/"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .getPokemonList, .pokemonDetail, .getFilteredPokemon:
+        case .getPokemonList, .pokemonDetail, .getFilteredPokemon, .getPokemonsForType:
             return .get
         }
     }

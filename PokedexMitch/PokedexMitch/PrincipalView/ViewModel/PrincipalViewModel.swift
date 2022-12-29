@@ -27,4 +27,8 @@ class PrincipalViewModel {
     func getPokemonFilered(with search: String) -> Observable<PokemonModel> {
         return managerConnections.getFilteredPokemon(with: search)
     }
+
+    func getPokemonsForType(with type: String) -> Observable<PokemonsForType> {
+        return managerConnections.getPokemonsForType(with: type)
+    }
 }

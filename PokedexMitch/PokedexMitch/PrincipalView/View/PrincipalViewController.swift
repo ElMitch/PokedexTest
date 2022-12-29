@@ -27,7 +27,7 @@ class PrincipalViewController: UIViewController {
     private var filteredPokemons: [PokemonModel] = []
     private var isHaveNext: Bool = true
     private var isSearchActive: Bool = false
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -35,7 +35,7 @@ class PrincipalViewController: UIViewController {
         getData()
         manageSearchBarController()
     }
-
+    
     private func setupView() {
         view.backgroundColor = .black.withAlphaComponent(0.7)
         emptyView.backgroundColor = .black
@@ -55,24 +55,27 @@ class PrincipalViewController: UIViewController {
             emptyView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             emptyView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             emptyView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-
+            
             emptyImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyImage.bottomAnchor.constraint(equalTo: emptyLabel.topAnchor, constant: -12),
             emptyImage.heightAnchor.constraint(equalToConstant: 120),
             emptyImage.widthAnchor.constraint(equalToConstant: 150),
-
+            
             emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             emptyLabel.leadingAnchor.constraint(equalTo: emptyView.leadingAnchor, constant: 24),
             emptyLabel.trailingAnchor.constraint(equalTo: emptyView.trailingAnchor, constant: -24)
         ])
-
+        
         emptyImage.image = UIImage(named: "emptyImage")
         emptyLabel.attributedText = .init(string: "Parece que no hemos podido encontrar resultados. Intenta con otra busqueda", attributes: NSAttributedString.pokemonDetailNumber)
         emptyLabel.numberOfLines = 0
         emptyLabel.textAlignment = .center
         emptyView.isHidden = true
+        
+        //Observer Notification
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotification(_:)), name: Notification.Name(NotificationKeys().typeOfPokemonNotification), object: nil)
     }
-
+    
     private func setupCollectionView() {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
@@ -83,7 +86,7 @@ class PrincipalViewController: UIViewController {
         collectionView.backgroundColor = .clear
         view.registerView(collectionView)
     }
-
+    
     private func getData() {
         return viewModel.getPokemonList(offset: pokemonsList.count)
             .subscribe(on: MainScheduler.instance)
@@ -96,13 +99,13 @@ class PrincipalViewController: UIViewController {
                 print(error.localizedDescription)
             }.disposed(by: disposeBag)
     }
-
+    
     private func getFilteredData(with search: String) {
         return viewModel.getPokemonFilered(with: search)
             .subscribe(on: MainScheduler.instance)
             .observe(on: MainScheduler.instance)
-            .subscribe { [weak self] pokemonResult in
-                self?.filteredPokemons.append(pokemonResult)
+            .subscribe { [weak self] pokemonsResult in
+                self?.filteredPokemons.append(pokemonsResult)
                 self?.reloadCollectionView()
                 self?.emptyView.isHidden = true
             } onError: { [weak self] errorResult in
@@ -110,9 +113,39 @@ class PrincipalViewController: UIViewController {
                 print(errorResult.localizedDescription)
             }.disposed(by: disposeBag)
     }
+    
+    @objc private func handleNotification(_ notification: NSNotification) {
+        if let dict = notification.userInfo as NSDictionary?,
+           let type = dict["type"] as? String {
+            isSearchActive = true
+            searchController.searchBar.isHidden = true
+            filteredPokemons.removeAll()
+            getForType(with: type)
+        }
+    }
+    
+    private func getForType(with type: String) {
+        return viewModel.getPokemonsForType(with: type)
+            .subscribe(on: MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
+            .subscribe { [weak self] pokemonResult in
+                guard let self = self else { return }
+                let pokemonForType: [PokemonModel] = self.getPokemons(of: pokemonResult)
+                self.filteredPokemons.append(contentsOf: pokemonForType)
+                self.reloadCollectionView()
+                self.collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+                self.emptyView.isHidden = true
+            } onError: { [weak self] errorResult in
+                self?.emptyView.isHidden = false
+                print(errorResult.localizedDescription)
+            }.disposed(by: disposeBag)
+    }
 
-    private func getForType(with type: Int) {
-        
+    private func getPokemons(of list: PokemonsForType) -> [PokemonModel] {
+        let pokemonList: [PokemonModel] = list.pokemon.map { pokemonResult -> PokemonModel in
+            return PokemonModel(name: pokemonResult.pokemon.name, id: Int(pokemonResult.pokemon.url?.getIDOfURLForType() ?? "0"), url: pokemonResult.pokemon.url)
+        }
+        return pokemonList
     }
 
     private func reloadCollectionView() {
@@ -174,6 +207,7 @@ extension PrincipalViewController: UISearchControllerDelegate, UISearchBarDelega
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         isSearchActive = false
+        filteredPokemons.removeAll()
         collectionView.reloadData()
     }
 }

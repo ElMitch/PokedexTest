@@ -89,4 +89,27 @@ final class NetworkManagerService {
             }
         }
     }
+
+    func getPokemonsForType(with type: String) -> Observable<PokemonsForType> {
+        return Observable.create { observer in
+            self.provider.requestValidated(.getPokemonsForType(type: type)) { result in
+                switch result {
+                case let .success(response):
+                    do {
+                        let detailData = try JSONDecoder().decode(PokemonsForType.self, from: response.data)
+                        observer.onNext(detailData)
+                    } catch let error {
+                        observer.onError(error)
+                    }
+                case let .failure(error):
+                    print("Error request: \(error.errorDescription ?? "")")
+                    observer.onError(error)
+                }
+                observer.onCompleted()
+            }
+            return Disposables.create {
+                print("Se completo la obtencion de la lista de types")
+            }
+        }
+    }
 }

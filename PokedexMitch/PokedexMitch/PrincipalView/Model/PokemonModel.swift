@@ -18,3 +18,11 @@ struct PokemonModel: Codable, Hashable {
     let id: Int?
     let url: String?
 }
+
+struct PokemonsForType: Codable, Hashable {
+    let pokemon: [PokemonForType]
+}
+
+struct PokemonForType: Codable, Hashable {
+    let pokemon: PokemonModel
+}

@@ -156,6 +156,9 @@ class DetailViewController: UIViewController {
         let tapFirst = UITapGestureRecognizer(target: self, action: #selector(didTapFirstType))
         firstContainer.addGestureRecognizer(tapFirst)
 
+        let tapSecond = UITapGestureRecognizer(target: self, action: #selector(didTapSecondType))
+        secondContainer.addGestureRecognizer(tapSecond)
+
         typesTitle.attributedText = .init(string: "Tipo", attributes: NSAttributedString.pokemonDetailName)
 
         statsTitle.attributedText = .init(string: "Stats", attributes: NSAttributedString.pokemonDetailName)
@@ -206,8 +209,19 @@ class DetailViewController: UIViewController {
     }
 
     @objc private func didTapFirstType() {
-        var urlWithOnlyNumber = firstURL.replacingOccurrences(of: "https://pokeapi.co/api/v2/type/", with: "")
-        let onlyNumber = urlWithOnlyNumber.replacingOccurrences(of: "/", with: "")
-        print(onlyNumber)
+        let onlyNumber = firstURL.getTypeOfURL()
+        sendType(with: onlyNumber)
+    }
+
+    @objc private func didTapSecondType() {
+        let onlyNumber = secondURL.getTypeOfURL()
+        sendType(with: onlyNumber)
+    }
+
+    private func sendType(with number: String) {
+        var info = [String: String]()
+        info["type"] = number
+        NotificationCenter.default.post(name: Notification.Name(NotificationKeys().typeOfPokemonNotification), object: nil, userInfo: info)
+        self.navigationController?.popViewController(animated: true)
     }
 }
