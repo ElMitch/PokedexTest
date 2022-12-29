@@ -206,9 +206,10 @@ class PrincipalViewController: UIViewController {
         if let dict = notification.userInfo as NSDictionary?,
            let type = dict["type"] as? String {
             isSearchActive = true
-            searchController.searchBar.isHidden = true
             navigationItem.rightBarButtonItem?.isHidden = true
             filteredPokemons.removeAll()
+            searchForType()
+            searchController.searchBar.isHidden = true
             getForType(with: type)
         }
     }
@@ -224,7 +225,12 @@ class PrincipalViewController: UIViewController {
     }
 
     @objc private func searchForType() {
-        isShowTypes.toggle()
+        if !isSearchActive {
+            isShowTypes.toggle()
+        } else {
+            isShowTypes = false
+        }
+        
         searchController.searchBar.isHidden = isShowTypes
         UIView.animate(withDuration: 1) {
             self.containerTypesViewHeightContraint.constant = self.isShowTypes ? 200 : 0
