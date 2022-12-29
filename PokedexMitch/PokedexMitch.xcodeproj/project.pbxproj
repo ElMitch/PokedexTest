@@ -141,17 +141,9 @@
 		7F6799FE295D1E2F0077EEC5 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				7F6799FF295D1E390077EEC5 /* Font */,
 				7FC45EBF295C0DA300A84621 /* Assets.xcassets */,
 			);
 			path = Assets;
-			sourceTree = "<group>";
-		};
-		7F6799FF295D1E390077EEC5 /* Font */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Font;
 			sourceTree = "<group>";
 		};
 		7F679A06295D1F0C0077EEC5 /* Network */ = {
